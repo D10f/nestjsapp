@@ -1,0 +1,18 @@
+version: '2.4'
+
+services:
+  postgres:
+    image: 'postgres:14.0'
+    environment:
+      POSTGRES_USERNAME: 'postgres'
+      POSTGRES_PASSWORD: 'nestjsapp'
+    ports:
+      - '127.0.0.1:5432:5432'
+      
+  pgadmin:
+    image: 'dpage/pgadmin4'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: 'nest_test@example.com'
+      PGADMIN_DEFAULT_PASSWORD: 'nestjsapp'
+    ports:
+      - '127.0.0.1:5555:80'
