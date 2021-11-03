@@ -1,3 +1,4 @@
+// No longer in use as is replaced by the TypeORM Entity model.
 export interface ITask {
   id: string;
   title: string;

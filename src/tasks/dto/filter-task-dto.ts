@@ -1,4 +1,4 @@
-import { IsEnum, IsLowercase, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsEnum, IsOptional, IsString } from "class-validator";
 import { TaskStatus } from "../tasks.model";
 
 export class FilterTasksDto {
@@ -8,6 +8,5 @@ export class FilterTasksDto {
 
   @IsOptional()
   @IsString()
-  @IsLowercase()
   search?: string
 }

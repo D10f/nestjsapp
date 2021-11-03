@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Delete, Patch, Query } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { ITask } from './tasks.model';
+import { Task } from './tasks.entity';
 import { CreateTaskDto } from './dto/create-task-dto';
 import { UpdateTaskDto } from './dto/update-task-dto';
 import { FilterTasksDto } from './dto/filter-task-dto';
@@ -9,36 +9,33 @@ import { FilterTasksDto } from './dto/filter-task-dto';
 export class TasksController {
     constructor(private TasksService: TasksService) { }
 
-    // @Get()
-    // getTasks(@Query() filters: FilterTasksDto): Task[] {
-    //     if (Object.keys(filters).length) {
-    //         return this.TasksService.getFilteredTasks(filters);
-    //     }
-    //     return this.TasksService.getAllTasks();
-    // }
+    @Get()
+    getTasks(@Query() filters: FilterTasksDto): Promise<Task[]> {
+        return this.TasksService.getTasks(filters);
+    }
 
-    // @Get('/:id')
-    // getTaskById(@Param('id') id: string): Task {
-    //     return this.TasksService.findById(id);
-    // }
+    @Get('/:id')
+    getTaskById(@Param('id') id: string): Promise<Task> {
+        return this.TasksService.findById(id);
+    }
 
-    // @Post()
-    // createTask(@Body() createTaskDto: CreateTaskDto): Task {
-    //     return this.TasksService.createTask(createTaskDto);
-    // }
+    @Post()
+    createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+        return this.TasksService.createTask(createTaskDto);
+    }
 
-    // @Patch('/:id/:property')
-    // updateTask(
-    //     @Param('id') id: string,
-    //     @Param('property') property: string,
-    //     @Body() updateTaskDto: UpdateTaskDto
-    // ): Task {
-    //     return this.TasksService.updateTask(id, property, updateTaskDto);
-    // }
+    @Patch('/:id')
+    updateTask(
+        @Param('id') id: string,
+        @Body() updateTaskDto: UpdateTaskDto
+    ): Promise<Task>
+    {
+        return this.TasksService.updateTask(id, updateTaskDto);
+    }
 
-    // @Delete('/:id')
-    // deleteTask(@Param('id') id: string) {
-    //     this.TasksService.deleteTask(id);
-    // }
+    @Delete('/:id')
+    deleteTask(@Param('id') id: string) {
+        return this.TasksService.deleteTask(id);
+    }
 
 }
