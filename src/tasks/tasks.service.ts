@@ -6,7 +6,6 @@ import { UpdateTaskDto } from './dto/update-task-dto';
 import { FilterTasksDto } from './dto/filter-task-dto';
 import { TasksRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import e from 'express';
 
 @Injectable()
 export class TasksService {
@@ -32,23 +31,6 @@ export class TasksService {
   createTask(createTaskDto: CreateTaskDto): Promise<Task> {
     return this.tasksRepository.createTask(createTaskDto);
   }
-
-  // getFilteredTasks(filters: FilterTasksDto) {
-  //   let { search, status } = filters;
-
-  //   return this.tasks.filter(task => {
-
-  //     const statusMatch = status
-  //       ? status.toUpperCase() === task.status
-  //       : true;
-
-  //     const searchMatch = search
-  //       ? task.title.toLowerCase().includes(search.toLowerCase()) || task.description.toLowerCase().includes(search.toLowerCase())
-  //       : true;
-
-  //     return statusMatch && searchMatch;
-  //   });
-  // }
 
   async updateTask(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
     const task = await this.findById(id);
