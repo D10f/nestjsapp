@@ -4,9 +4,12 @@ import { TaskStatus } from './tasks.model';
 import { CreateTaskDto } from './dto/create-task-dto';
 import { FilterTasksDto } from './dto/filter-task-dto';
 import { User } from 'src/auth/auth.entity';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 
 @EntityRepository(Task)
 export class TasksRepository extends Repository<Task> {
+  private logger = new Logger('TasksRepository', { timestamp: true });
+
   async getTasks(filterDto: FilterTasksDto, user: User): Promise<Task[]> {
     const { status, search } = filterDto;
 
@@ -23,10 +26,21 @@ export class TasksRepository extends Repository<Task> {
       );
     }
 
-    // Selects the associated user entity along each task.
-    const tasks = await query.leftJoinAndSelect('task.user', 'author').getMany();
-
-    return tasks;
+    try {
+      // Selects the associated user entity along each task.
+      const tasks = await query
+        .leftJoinAndSelect('task.user', 'author')
+        .getMany();
+      return tasks;
+    } catch (error) {
+      this.logger.error(
+        `Error retrieving tasks for user ${user.username}. ${JSON.stringify(
+          error.message,
+        )}`,
+        error.stack,
+      );
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
