@@ -6,21 +6,22 @@ import { UpdateTaskDto } from './dto/update-task-dto';
 import { FilterTasksDto } from './dto/filter-task-dto';
 import { TasksRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/auth/auth.entity';
 
 @Injectable()
 export class TasksService {
   constructor(
     @InjectRepository(TasksRepository)
-    private tasksRepository: TasksRepository
+    private tasksRepository: TasksRepository,
   ) {}
 
-  getTasks(filters: FilterTasksDto): Promise<Task[]> {
-    return this.tasksRepository.getTasks(filters);
+  async getTasks(filters: FilterTasksDto, user: User): Promise<Task[]> {
+    return await this.tasksRepository.getTasks(filters, user);
   }
 
-  async findById(id: string): Promise<Task> {
-    const task = await this.tasksRepository.findOne(id);
-    
+  async findById(id: string, user: User): Promise<Task> {
+    const task = await this.tasksRepository.findOne({ where: { id, user } });
+
     if (!task) {
       throw new NotFoundException(`No tasks were found with id: ${id}`);
     }
@@ -28,20 +29,24 @@ export class TasksService {
     return task;
   }
 
-  createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-    return this.tasksRepository.createTask(createTaskDto);
+  createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
+    return this.tasksRepository.createTask(createTaskDto, user);
   }
 
-  async updateTask(id: string, updateTaskDto: UpdateTaskDto): Promise<Task> {
-    const task = await this.findById(id);
+  async updateTask(
+    id: string,
+    updateTaskDto: UpdateTaskDto,
+    user: User,
+  ): Promise<Task> {
+    const task = await this.findById(id, user);
     const updatedTask = { ...task, ...updateTaskDto };
     await this.tasksRepository.save(updatedTask);
     return updatedTask;
   }
 
-  async deleteTask(id: string) {
-    const result = await this.tasksRepository.delete(id);
-    
+  async deleteTask(id: string, user: User) {
+    const result = await this.tasksRepository.delete({ user, id });
+
     if (!result.affected) {
       throw new NotFoundException(`No tasks were found with id: ${id}`);
     }
