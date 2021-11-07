@@ -1,4 +1,4 @@
-import { User } from 'src/auth/auth.entity';
+import { User } from '../auth/auth.entity';
 import { Column, Entity, JoinTable, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TaskStatus } from './tasks.model';
 

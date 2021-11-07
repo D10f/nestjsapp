@@ -3,8 +3,8 @@ import { Task } from './tasks.entity';
 import { TaskStatus } from './tasks.model';
 import { CreateTaskDto } from './dto/create-task-dto';
 import { FilterTasksDto } from './dto/filter-task-dto';
-import { User } from 'src/auth/auth.entity';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
+import { User } from '../auth/auth.entity';
 
 @EntityRepository(Task)
 export class TasksRepository extends Repository<Task> {

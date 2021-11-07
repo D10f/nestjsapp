@@ -16,8 +16,8 @@ import { CreateTaskDto } from './dto/create-task-dto';
 import { UpdateTaskDto } from './dto/update-task-dto';
 import { FilterTasksDto } from './dto/filter-task-dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user-decorator';
-import { User } from 'src/auth/auth.entity';
+import { GetUser } from '../auth/get-user-decorator';
+import { User } from '../auth/auth.entity';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'process';
 
